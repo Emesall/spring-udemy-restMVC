@@ -1,7 +1,7 @@
 package com.emesall.restmvc.service;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.matchers.Any;
 
 import com.emesall.restmvc.api.v1.mapper.CategoryMapper;
 import com.emesall.restmvc.api.v1.model.CategoryDTO;

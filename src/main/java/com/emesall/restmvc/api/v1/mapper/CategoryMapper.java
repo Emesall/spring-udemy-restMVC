@@ -9,6 +9,7 @@ import com.emesall.restmvc.model.Category;
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
-	CategoryMapper INSTANCE=Mappers.getMapper(CategoryMapper.class);
+	CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
+
 	CategoryDTO categoryToCategoryDTO(Category category);
 }

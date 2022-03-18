@@ -2,9 +2,11 @@ package com.emesall.restmvc.controller.v1;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,7 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.emesall.restmvc.api.v1.model.CustomerDTO;
 import com.emesall.restmvc.service.CustomerService;
 
-class CustomerControllerTest {
+class CustomerControllerTest extends AbstractRestControllerTest {
 
 	@Mock
 	CustomerService customerService;
@@ -67,6 +69,23 @@ class CustomerControllerTest {
 		// then
 		mockMvc.perform(get("/api/v1/customers/name").contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.firstname", equalTo("name")));
+	}
+	
+	@Test
+	void testCreateCustomer() throws Exception {
+		// given
+		CustomerDTO customer = new CustomerDTO();
+		customer.setId(1L);
+		customer.setFirstname("name");
+
+		// when
+		when(customerService.createCustomer(any(CustomerDTO.class))).thenReturn(customer);
+
+		// then
+		mockMvc.perform(post("/api/v1/customers").contentType(MediaType.APPLICATION_JSON)
+		 		.content(asJsonString(customer)))
+				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.firstname", equalTo("name")));
 	}
 

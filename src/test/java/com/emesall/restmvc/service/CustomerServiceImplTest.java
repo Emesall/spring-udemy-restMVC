@@ -1,7 +1,8 @@
 package com.emesall.restmvc.service;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +24,16 @@ class CustomerServiceImplTest {
 	CustomerService customerService;
 	@Mock
 	CustomerRepository customerRepository;
+	
+	CustomerMapper customerMapper;
 
 	
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		MockitoAnnotations.openMocks(this);		
-		customerService=new CustomerServiceImpl(customerRepository, CustomerMapper.INSTANCE);
+		MockitoAnnotations.openMocks(this);	
+		customerMapper=CustomerMapper.INSTANCE;
+		customerService=new CustomerServiceImpl(customerRepository, customerMapper);
 	}
 
 	@Test
@@ -61,6 +65,24 @@ class CustomerServiceImplTest {
 		Assertions.assertNotNull(CustomerDTO);
 		Assertions.assertEquals("firstName", CustomerDTO.getFirstname() );
 		Assertions.assertEquals(1L, CustomerDTO.getId() );
+		
+	}
+	
+	@Test
+	void testCreateCustomer() {
+		//given
+		Customer customer=new Customer();
+		customer.setFirstname("firstName");
+		customer.setLastname("LastName");
+		customer.setId(1L);
+		CustomerDTO customerDTO =customerMapper.customerToCustomerDTO(customer);
+		//when
+		when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+		CustomerDTO customerCreated=customerService.createCustomer(customerDTO);
+		//then
+		Assertions.assertNotNull(customerCreated);
+		Assertions.assertEquals("firstName", customerCreated.getFirstname() );
+		Assertions.assertEquals(1L, customerCreated.getId() );
 		
 	}
 

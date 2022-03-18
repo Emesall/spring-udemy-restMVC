@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.emesall.restmvc.api.v1.mapper.CustomerMapper;
 import com.emesall.restmvc.api.v1.model.CustomerDTO;
+import com.emesall.restmvc.model.Customer;
 import com.emesall.restmvc.repositories.CustomerRepository;
 
 @Service
@@ -35,5 +36,15 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDTO getCustomerByFirstName(String firstName) {
 		return customerMapper.customerToCustomerDTO(customerRepository.findByFirstname(firstName));
 	}
+
+	@Override
+	public CustomerDTO createCustomer(CustomerDTO customerDTO) {
+		Customer customer=customerMapper.customerDTOToCustomer(customerDTO);
+		Customer savedCustomer=customerRepository.save(customer);
+		
+		return customerMapper.customerToCustomerDTO(savedCustomer);
+	}
+	
+	
 
 }

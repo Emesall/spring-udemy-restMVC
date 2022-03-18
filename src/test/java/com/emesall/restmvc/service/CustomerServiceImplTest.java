@@ -85,5 +85,25 @@ class CustomerServiceImplTest {
 		Assertions.assertEquals(1L, customerCreated.getId() );
 		
 	}
+	
+	@Test
+	void testUpdateCustomer() {
+		//given
+		Customer customer=new Customer();
+		customer.setFirstname("firstName");
+		customer.setLastname("LastName");
+		customer.setId(1L);
+		
+		CustomerDTO customerDTO =customerMapper.customerToCustomerDTO(customer);
+		//when
+		when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+		CustomerDTO customerCreated=customerService.updateCustomer(1L, customerDTO);
+	
+		//then
+		Assertions.assertNotNull(customerCreated);
+		Assertions.assertEquals("firstName", customerCreated.getFirstname() );
+		Assertions.assertEquals(1L, customerCreated.getId() );
+		
+	}
 
 }

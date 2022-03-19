@@ -2,6 +2,7 @@ package com.emesall.restmvc.controller.v1;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +50,11 @@ public class CustomerController {
 	@PatchMapping("{id}")
 	public ResponseEntity<CustomerDTO> updatePartOfCustomer(@RequestBody CustomerDTO customerDTO,@PathVariable Long id){
 		return new ResponseEntity<CustomerDTO>(customerService.updatePartOfCustomer(id,customerDTO),HttpStatus.OK);
+	}
+	@DeleteMapping("{id}")
+	public ResponseEntity<Void> deleteCustomer(@PathVariable Long id){
+		customerService.deleteCustomerById(id);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	

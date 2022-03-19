@@ -1,8 +1,12 @@
 package com.emesall.restmvc.service;
 
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +107,18 @@ class CustomerServiceImplTest {
 		Assertions.assertNotNull(customerCreated);
 		Assertions.assertEquals("firstName", customerCreated.getFirstname() );
 		Assertions.assertEquals(1L, customerCreated.getId() );
+		
+	}
+	
+	@Test
+	void testDeleteCustomer() {
+	
+		//when
+
+		customerService.deleteCustomerById(1L);
+	
+		//then
+		verify(customerRepository,times(1)).deleteById(anyLong());
 		
 	}
 

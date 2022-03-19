@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.emesall.restmvc.api.v1.model.CategoryDTO;
@@ -25,13 +26,15 @@ public class CategoryController {
 	}
 
 	@GetMapping
-	public ResponseEntity<CategoryListDTO> getCategories() {
-		return new ResponseEntity<CategoryListDTO>(new CategoryListDTO(categoryService.getCategories()), HttpStatus.OK);
+	@ResponseStatus(HttpStatus.OK)
+	public CategoryListDTO getCategories() {
+		return new CategoryListDTO(categoryService.getCategories());
 	}
 
 	@GetMapping("{name}")
-	public ResponseEntity<CategoryDTO> getCategoryByName(@PathVariable String name) {
-		return new ResponseEntity<CategoryDTO>(categoryService.getCategory(name), HttpStatus.OK);
+	@ResponseStatus(HttpStatus.OK)
+	public CategoryDTO getCategoryByName(@PathVariable String name) {
+		return categoryService.getCategory(name);
 	}
 
 }

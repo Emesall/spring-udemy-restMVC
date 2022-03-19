@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.emesall.restmvc.api.v1.mapper.CustomerMapper;
 import com.emesall.restmvc.api.v1.model.CustomerDTO;
+import com.emesall.restmvc.exception.ResourceNotFoundException;
 import com.emesall.restmvc.model.Customer;
 import com.emesall.restmvc.repositories.CustomerRepository;
 
@@ -34,7 +35,11 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerDTO getCustomerByFirstName(String firstName) {
-		return customerMapper.customerToCustomerDTO(customerRepository.findByFirstname(firstName));
+		
+		return customerRepository.findByFirstname(firstName)
+				.map(customer->customerMapper.customerToCustomerDTO(customer))
+				.orElseThrow(() -> new ResourceNotFoundException());
+				
 	}
 
 	@Override
@@ -71,7 +76,7 @@ public class CustomerServiceImpl implements CustomerService {
 			})
 				.map(customerRepository::save)
 				.map(customerMapper::customerToCustomerDTO)
-				.orElseThrow(() -> new RuntimeException());
+				.orElseThrow(() -> new ResourceNotFoundException());
 
 	}
 

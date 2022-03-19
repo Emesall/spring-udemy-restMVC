@@ -2,6 +2,8 @@ package com.emesall.restmvc.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,8 @@ class CustomerRepositoryTest {
 		Customer customer=new Customer();
 		customer.setFirstname("firstname");
 		customerRepository.save(customer);
-		Customer customerFound=customerRepository.findByFirstname("firstname");
-		assertEquals("firstname", customerFound.getFirstname());
+		Optional<Customer> customerFound=customerRepository.findByFirstname("firstname");
+		assertEquals("firstname", customerFound.get().getFirstname());
 		
 	}
 

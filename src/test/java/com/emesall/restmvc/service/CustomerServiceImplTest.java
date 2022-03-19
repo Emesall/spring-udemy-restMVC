@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,8 +63,9 @@ class CustomerServiceImplTest {
 		customer.setFirstname("firstName");
 		customer.setLastname("LastName");
 		customer.setId(1L);
+		
 		//when
-		when(customerRepository.findByFirstname(anyString())).thenReturn(customer);
+		when(customerRepository.findByFirstname(anyString())).thenReturn(Optional.of(customer));
 		CustomerDTO CustomerDTO=customerService.getCustomerByFirstName("firstname");
 		//then
 		Assertions.assertNotNull(CustomerDTO);
@@ -71,6 +73,7 @@ class CustomerServiceImplTest {
 		Assertions.assertEquals(1L, CustomerDTO.getId() );
 		
 	}
+	
 	
 	@Test
 	void testCreateCustomer() {

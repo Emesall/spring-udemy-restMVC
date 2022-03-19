@@ -28,6 +28,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.emesall.restmvc.api.v1.model.CustomerDTO;
+import com.emesall.restmvc.controller.RestResponseEntityExceptionHandler;
+import com.emesall.restmvc.exception.ResourceNotFoundException;
 import com.emesall.restmvc.service.CustomerService;
 
 class CustomerControllerTest extends AbstractRestControllerTest {
@@ -42,7 +44,9 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
-		mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+				.setControllerAdvice(new RestResponseEntityExceptionHandler())
+				.build();
 	}
 
 	@Test
@@ -78,6 +82,15 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 	}
 
 	@Test
+	public void testNotFoundException() throws Exception {
+
+		when(customerService.getCustomerByFirstName(anyString())).thenThrow(ResourceNotFoundException.class);
+
+		mockMvc.perform(get("/api/v1/customers/name").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
 	void testCreateCustomer() throws Exception {
 		// given
 		CustomerDTO customer = new CustomerDTO();
@@ -105,24 +118,21 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 		when(customerService.updateCustomer(anyLong(), any(CustomerDTO.class))).thenReturn(customer);
 
 		// then
-		mockMvc.perform(put("/api/v1/customers/1")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(asJsonString(customer)))
+		mockMvc.perform(
+				put("/api/v1/customers/1").contentType(MediaType.APPLICATION_JSON).content(asJsonString(customer)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.firstname", equalTo("name")))
 				.andExpect(jsonPath("$.id", equalTo(1)));
 	}
-	
+
 	@Test
 	void testDeleteCustomer() throws Exception {
-		
-		
-		mockMvc.perform(delete("/api/v1/customers/1")
-				.contentType(MediaType.APPLICATION_JSON))
+
+		mockMvc.perform(delete("/api/v1/customers/1").contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
-		
-		verify(customerService,times(1)).deleteCustomerById(anyLong());
-				
+
+		verify(customerService, times(1)).deleteCustomerById(anyLong());
+
 	}
 
 }

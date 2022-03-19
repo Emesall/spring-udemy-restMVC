@@ -3,6 +3,7 @@ package com.emesall.restmvc.controller.v1;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,6 +44,11 @@ public class CustomerController {
 	@PutMapping("{id}")
 	public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO customerDTO,@PathVariable Long id){
 		return new ResponseEntity<CustomerDTO>(customerService.updateCustomer(id,customerDTO),HttpStatus.OK);
+	}
+	
+	@PatchMapping("{id}")
+	public ResponseEntity<CustomerDTO> updatePartOfCustomer(@RequestBody CustomerDTO customerDTO,@PathVariable Long id){
+		return new ResponseEntity<CustomerDTO>(customerService.updatePartOfCustomer(id,customerDTO),HttpStatus.OK);
 	}
 	
 	
